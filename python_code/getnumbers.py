@@ -12,6 +12,12 @@ def preprocess_image(image_path):
     # Apply adaptive thresholding to make the grid and numbers stand out
     thresh = cv2.adaptiveThreshold(blurred, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
                                    cv2.THRESH_BINARY_INV, 11, 2)
+
+    # Show the thresholded image
+    cv2.imshow('Threshold Image', thresh)
+    cv2.waitKey(0)  # Wait for any key to be pressed
+    cv2.destroyAllWindows()
+
     return thresh
 
 def extract_cells(thresh_img):
@@ -28,6 +34,11 @@ def extract_cells(thresh_img):
     # Resize the grid to a standard size (e.g., 450x450)
     grid_resized = cv2.resize(grid, (450, 450))
 
+    # Show the resized grid
+    cv2.imshow('Resized Grid', grid_resized)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
     # Divide the grid into 81 cells (9x9)
     cells = []
     cell_size = 50  # 450/9 = 50 pixels per cell
@@ -38,7 +49,14 @@ def extract_cells(thresh_img):
             y_start = row * cell_size
             cell = grid_resized[y_start:y_start + cell_size, x_start:x_start + cell_size]
             row_cells.append(cell)
+
+            # Show each extracted cell
+            cv2.imshow(f'Cell {row+1}-{col+1}', cell)
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()
+
         cells.append(row_cells)
+    
     return cells
 
 def recognize_numbers(cells):
@@ -62,7 +80,6 @@ def recognize_numbers(cells):
                 row_numbers.append(0)  # Use 0 for empty cells
         sudoku_grid.append(row_numbers)
     return sudoku_grid
-
 
 def main(image_path):
     # Preprocess the image
