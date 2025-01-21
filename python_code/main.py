@@ -2,6 +2,8 @@ import cv2
 import numpy as np
 import time
 
+import Getnumbers_Solve
+
 # Function to detect the largest quadrilateral in a given frame
 def detect_largest_quadrilateral(frame):
     # Convert the frame to grayscale (required for many image processing operations)
@@ -104,9 +106,9 @@ def main():
             # Check if the quadrilateral is stable for 2 seconds
             if stable_start_time is None:
                 stable_start_time = time.time()
-            elif time.time() - stable_start_time >= 2:
+            elif time.time() - stable_start_time >= 4:
                 # If stable for 2 seconds, capture and crop the quadrilateral
-                print("Stable detection for 2 seconds, capturing image!")
+                print("Stable detection for 4 seconds, capturing image!")
                 cropped = crop_to_quadrilateral(frame, corners)
                 cv2.imwrite("cropped_grid.jpg", cropped)  # Save the cropped image
                 cv2.imshow("Cropped Grid", cropped)  # Show the cropped image
@@ -131,3 +133,4 @@ def main():
 # Run the main function if the script is executed directly
 if __name__ == "__main__":
     main()
+    Getnumbers_Solve.main("cropped_grid.jpg")
